@@ -5,6 +5,7 @@
 namespace EcommerceSystem.DAL.Migrations
 {
     /// <inheritdoc />
+    /// 
     public partial class EditOrder : Migration
     {
         /// <inheritdoc />

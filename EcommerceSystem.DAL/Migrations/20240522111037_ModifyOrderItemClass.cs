@@ -25,5 +25,6 @@ namespace EcommerceSystem.DAL.Migrations
                 nullable: false,
                 defaultValue: 0.0);
         }
+
     }
 }

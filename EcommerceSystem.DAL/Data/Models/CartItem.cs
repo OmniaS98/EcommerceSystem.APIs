@@ -12,8 +12,6 @@ public class CartItem
     public int Id { get; set; }
     public int CartId { get; set; }
     public int ProductId { get; set; }
-
-    [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid value")]
     public int Quantity { get; set; }
 
     //Navigation properties

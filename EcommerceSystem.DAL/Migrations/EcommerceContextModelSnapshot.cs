@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
+
 namespace EcommerceSystem.DAL.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
