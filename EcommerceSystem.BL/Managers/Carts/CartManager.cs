@@ -32,7 +32,7 @@ public class CartManager : ICartManager
             throw new Exception("No product with provided id");
 
         //Check product availability
-        var isAvailable = IsProductAvailable(product, cartItemDto.Quantity);
+        var isAvailable = _unitOfWork.CartRepository.IsProductAvailable(product, cartItemDto.Quantity);
         if (!isAvailable.available)
             throw new Exception(isAvailable.message);
 
@@ -99,7 +99,7 @@ public class CartManager : ICartManager
         var product = _unitOfWork.ProductRepository.GetById(cartItem.ProductId);
 
         //Check product availability
-        var isAvailable = IsProductAvailable(product!, updatedCartItemDto.Quantity);
+        var isAvailable = _unitOfWork.CartRepository.IsProductAvailable(product!, updatedCartItemDto.Quantity);
         if (!isAvailable.available)
         {
             throw new Exception(isAvailable.message);
@@ -133,16 +133,5 @@ public class CartManager : ICartManager
         var product = _unitOfWork.ProductRepository.GetById(cartItem.ProductId);
         userCart.Items.Remove(cartItem);
         _unitOfWork.SaveChanges();
-    }
-
-
-    private (bool available, string message) IsProductAvailable(Product product, int requiredQuantity)
-    {
-        if (product.Quantity == 0)
-            return (false, "Out of stock");
-        else if (product.Quantity < requiredQuantity)
-            return (false, $"Quantity exceeds the available stock. Available quantity: {product.Quantity} units");
-
-        return (true, "");
     }
 }

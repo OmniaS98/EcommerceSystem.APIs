@@ -13,8 +13,6 @@ public class Product
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public double Price { get; set; }
-
-    [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid value")]
     public int Quantity { get; set; }
 
     public int CategoryId { get; set; }
@@ -22,4 +20,5 @@ public class Product
     // Reference navigation 
     public Category Category { get; set; } = null!;
     public List<CartItem> CartItem { get; set; } = [];
+    public List<OrderItem> OrderItem { get; set; } = [];
 }

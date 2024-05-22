@@ -10,12 +10,11 @@ namespace EcommerceSystem.DAL.Data.Models;
 public  class OrderItem
 {
     public int Id { get; set; }
+    public int OrderId { get; set; }
     public int ProductId { get; set; }
-    public string ProductName { get; set; } = string.Empty;
-    [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid value")]
-    public double Price {  get; set; }
-    [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid value")]
     public int Quantity { get; set; }
- 
+
+    //Navigation properties
+    public Product Product { get; set; } = null!;
     public Order Order { get; set; } = null!;
 }

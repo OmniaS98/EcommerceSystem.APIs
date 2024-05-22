@@ -26,50 +26,16 @@ public class EcommerceContext : IdentityDbContext<Customer>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region Relationships (not needed)
-        // Category has one to many relation with products
-        //modelBuilder.Entity<Category>()
-        //    .HasMany(c => c.Products)
-        //    .WithOne(p => p.Category)
-        //    .HasForeignKey(p => p.CategoryId);
 
         base.OnModelCreating(modelBuilder);
+
         //User has one to one relation with cart 
         modelBuilder.Entity<Customer>()
              .HasOne(c => c.Cart)
              .WithOne(cart => cart.Cutomer)
              .HasForeignKey<Cart>(cart => cart.CustomerId);
 
-        //// User has one to many relation with Order
-        //modelBuilder.Entity<User>()
-        //    .HasMany(c => c.Orders)
-        //    .WithOne(o => o.User)
-        //    .HasForeignKey(o => o.UserId);
-
-
-        //// Cart has one to many relation with cart items
-        //modelBuilder.Entity<Cart>()
-        //    .HasMany(c => c.Items)
-        //    .WithOne(crtItems => crtItems.Cart)
-        //    .HasForeignKey(crtItems => crtItems.CartId);
-
-        //// Cart item has one to one relation with product
-        //modelBuilder.Entity<CartItem>()
-        //    .HasOne(ci => ci.Product)
-        //    .WithOne()
-        //    .HasForeignKey<CartItem>(ci => ci.ProductId);
-
-
-
-
-        //// Order has one to one relation with user and 
-        //// one to many with cart item
-        //modelBuilder.Entity<Order>()
-        //    .HasMany(o => o.CartItems)
-        //    .WithMany(ci => ci.Orders);
-
-
-        #endregion
+   
 
         #region Data Seed
         List<Category> categories =

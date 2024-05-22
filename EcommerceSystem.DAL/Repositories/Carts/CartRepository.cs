@@ -29,6 +29,16 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
         return cart;
     }
 
+    public (bool available, string message) IsProductAvailable(Product product, int requiredQuantity)
+    {
+        if (product.Quantity == 0)
+            return (false, "Out of stock");
+        else if (product.Quantity < requiredQuantity)
+            return (false, $"Quantity exceeds the available stock for Product ID: {product.Id}. Available quantity: {product.Quantity} units");
+
+        return (true, "");
+    }
+
 
 
 }

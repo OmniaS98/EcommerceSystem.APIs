@@ -12,7 +12,6 @@ public class Order
     public string CustomerId { get; set; } = string.Empty;  
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public double TotalPrice { get; set; }
-
     public Customer Customer { get; set; } = null!;
     public List<OrderItem> OrderItems { get; set; } = [];
 }

@@ -1,4 +1,5 @@
 ﻿using EcommerceSystem.BL.DTOs.Carts;
+using EcommerceSystem.BL.DTOs.Orders;
 using EcommerceSystem.BL.Managers.Orders;
 using EcommerceSystem.DAL.Data.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,11 @@ public class OrdersController: ControllerBase
     [Authorize]
     [HttpPost]
     [Route("placeOrder")]
-    public async Task<ActionResult> PlaceOrder(List<CartItemDTO> items)
+    public async Task<ActionResult> PlaceOrder(List<OrderItemRequestDTO> items)
     {
         try
         {
-            var user = await  _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             var order = _orderManager.CreateOrder(user!.Id, items);
             return Ok(order);
         }
@@ -36,6 +37,6 @@ public class OrdersController: ControllerBase
 
 
     }
-    
+
 
 }

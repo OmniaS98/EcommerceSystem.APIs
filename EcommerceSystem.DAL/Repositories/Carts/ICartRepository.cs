@@ -11,4 +11,5 @@ namespace EcommerceSystem.DAL.Repositories.Carts;
 public interface ICartRepository: IGenericRepository<Cart>
 {
     Cart? GetByCustomerId(string customerId);
+    public (bool available, string message) IsProductAvailable(Product product, int requiredQuantity);
 }

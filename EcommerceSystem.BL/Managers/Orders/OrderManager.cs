@@ -1,5 +1,6 @@
 ﻿using EcommerceSystem.BL.DTOs.Carts;
 using EcommerceSystem.BL.DTOs.Orders;
+using EcommerceSystem.BL.Managers.Carts;
 using EcommerceSystem.DAL;
 using EcommerceSystem.DAL.Data.Models;
 using System;
@@ -13,38 +14,80 @@ namespace EcommerceSystem.BL.Managers.Orders;
 public class OrderManager : IOrderManager
 {
     private readonly IUnitOfWork _unitOfWork;
+
     public OrderManager(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
-    public Order CreateOrder( string userId, List<CartItemDTO> items)
+    public OrderDTO CreateOrder(string userId, List<OrderItemRequestDTO> items)
     {
-        var userCart = _unitOfWork.CartRepository.GetByCustomerId(userId);
-        if (userCart == null || userCart.Items.Count == 0)
+        double totalPrice = 0;
+        var orderList = new List<OrderItem>();
+        var orderListDTO = new List<OrderItemDTO>();
+
+
+        foreach (var item in items)
         {
-            throw new Exception("The user's cart is empty.");
+            var product = _unitOfWork.ProductRepository.GetById(item.ProductId);
+
+            if (product == null)
+            {
+                throw new Exception($"No product with Id: {item.ProductId}");
+            }
+
+
+            //Check product availability
+            var isAvailable = _unitOfWork.CartRepository.IsProductAvailable(product, item.Quantity);
+
+            if (!isAvailable.available)
+            {
+                throw new Exception(isAvailable.message);
+            }
+
+            //Update product quantity
+            product.Quantity -= item.Quantity;
+
+            double price = item.Quantity * product.Price;
+            totalPrice += price;
+
+            orderList.Add(new OrderItem()
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity
+            });
+
+            orderListDTO.Add(new OrderItemDTO()
+            {
+                ProductId = item.ProductId,
+                ProductName = product.Name,
+                Quantity = item.Quantity,
+                UnitPrice = product.Price
+            });
         }
 
-        double totalPrice = 0;
-        List<CartItem> orderList = [];
-
-       foreach (var item in items)
-       { 
-
-            //double price = item.Quantity * product.Price;
-            //totalPrice += price;
-       }
-
+        
+        //Add new order
         var newOrder = new Order
         {
             CustomerId = userId,
+            CreatedDate = DateTime.Now,
             TotalPrice = totalPrice,
-            //CartItems = orderList
+            OrderItems = orderList
         };
 
         _unitOfWork.OrderRepository.Add(newOrder);
-
         _unitOfWork.SaveChanges();
-        return newOrder;
+
+        var orderDTO = new OrderDTO
+        {
+            CustomerId = newOrder.CustomerId,
+            OrderDate = newOrder.CreatedDate,
+            Items = orderListDTO,
+            TotalPrice = newOrder.TotalPrice
+        };
+
+        return orderDTO;
+        
+
     }
 }

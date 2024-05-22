@@ -11,5 +11,5 @@ namespace EcommerceSystem.BL.Managers.Orders;
 
 public interface IOrderManager
 {
-    public Order CreateOrder(string userId, List<CartItemDTO> items);
+     public OrderDTO CreateOrder(string userId, List<OrderItemRequestDTO> items);
 }
