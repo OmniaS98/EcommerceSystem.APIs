@@ -10,5 +10,5 @@ namespace EcommerceSystem.DAL.Data.Models;
 public class Customer: IdentityUser
 {
     public Cart? Cart { get; set; }
-    public List<Order> Orders { get; set; } = [];
+     //public List<Order> Orders { get; set; } = [];
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceSystem.DAL.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    [Migration("20240514020450_Intial")]
-    partial class Intial
+    [Migration("20240521005724_AddOrderIdToOrderItem")]
+    partial class AddOrderIdToOrderItem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,8 @@ namespace EcommerceSystem.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderItem");
                 });
@@ -627,7 +629,15 @@ namespace EcommerceSystem.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EcommerceSystem.DAL.Data.Models.Product", "Product")
+                        .WithMany("OrderItem")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EcommerceSystem.DAL.Data.Models.Product", b =>
@@ -717,6 +727,8 @@ namespace EcommerceSystem.DAL.Migrations
             modelBuilder.Entity("EcommerceSystem.DAL.Data.Models.Product", b =>
                 {
                     b.Navigation("CartItem");
+
+                    b.Navigation("OrderItem");
                 });
 #pragma warning restore 612, 618
         }
