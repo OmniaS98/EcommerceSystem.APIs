@@ -19,11 +19,11 @@ public class OrderManager : IOrderManager
     {
         _unitOfWork = unitOfWork;
     }
-    public OrderDTO CreateOrder(string userId, List<OrderItemRequestDTO> items)
+    public OrderDTO CreateOrder(string userId, List<OrderItemDTO> items)
     {
         double totalPrice = 0;
         var orderList = new List<OrderItem>();
-        var orderListDTO = new List<OrderItemDTO>();
+        var orderListDTO = new List<OrderItemResponseDTO>();
 
 
         foreach (var item in items)
@@ -56,7 +56,7 @@ public class OrderManager : IOrderManager
                 Quantity = item.Quantity
             });
 
-            orderListDTO.Add(new OrderItemDTO()
+            orderListDTO.Add(new OrderItemResponseDTO()
             {
                 ProductId = item.ProductId,
                 ProductName = product.Name,
@@ -80,7 +80,6 @@ public class OrderManager : IOrderManager
 
         var orderDTO = new OrderDTO
         {
-            CustomerId = newOrder.CustomerId,
             OrderDate = newOrder.CreatedDate,
             Items = orderListDTO,
             TotalPrice = newOrder.TotalPrice
@@ -89,5 +88,26 @@ public class OrderManager : IOrderManager
         return orderDTO;
         
 
+    }
+
+    
+        public List<OrderHistoryDTO> ViewHistory(string userId)
+        {
+            List<Order> orders = _unitOfWork.OrderRepository.GetAllWithDetails(userId);
+            List<OrderHistoryDTO> orderDTOs = orders.Select(o => new OrderHistoryDTO
+            {
+                OrderId = o.Id,
+                OrderDate = o.CreatedDate,
+                Items = o.OrderItems.Select(i => new OrderItemDTO
+                {
+                    ProductId= i.ProductId,
+                    Quantity = i.Quantity
+   
+                }).ToList(),
+
+                TotalPrice = o.TotalPrice
+            }).ToList();
+
+            return orderDTOs;
     }
 }

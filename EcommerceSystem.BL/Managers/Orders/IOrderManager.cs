@@ -11,5 +11,6 @@ namespace EcommerceSystem.BL.Managers.Orders;
 
 public interface IOrderManager
 {
-     public OrderDTO CreateOrder(string userId, List<OrderItemRequestDTO> items);
+     public OrderDTO CreateOrder(string userId, List<OrderItemDTO> items);
+     public List<OrderHistoryDTO> ViewHistory(string userId); 
 }

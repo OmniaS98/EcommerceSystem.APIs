@@ -22,13 +22,32 @@ public class OrdersController: ControllerBase
     [Authorize]
     [HttpPost]
     [Route("placeOrder")]
-    public async Task<ActionResult> PlaceOrder(List<OrderItemRequestDTO> items)
+    public async Task<ActionResult> PlaceOrder(List<OrderItemDTO> items)
     {
         try
         {
             var user = await _userManager.GetUserAsync(User);
             var order = _orderManager.CreateOrder(user!.Id, items);
             return Ok(order);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+
+    }
+
+    [Authorize]
+    [HttpGet]
+    [Route("history")]
+    public async Task<ActionResult> History()
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var orders = _orderManager.ViewHistory(user!.Id);
+            return Ok(orders);
         }
         catch (Exception ex)
         {

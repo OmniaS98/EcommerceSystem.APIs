@@ -10,5 +10,5 @@ namespace EcommerceSystem.DAL.Repositories.Orders;
 
 public interface IOrderRepository:IGenericRepository<Order>
 {
-    
+    public List<Order> GetAllWithDetails(string userId);
 }
